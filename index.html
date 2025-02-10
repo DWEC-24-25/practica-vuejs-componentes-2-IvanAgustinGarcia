@@ -37,28 +37,14 @@
           </div>
   
           <!-- Cards para cada item -->
-          <div class="row container mt-4 ms-4">
-              <div class="col-md-4" v-for="(item, index) in col.items" :key="index">
-                  <div class="card mb-3">
-                      <div class="card-body">    
-                          <!-- Lista de definición -->
-                          <dl class="mt-3">
-                              <div v-for="(dataItem, dataIndex) in item.data" :key="dataIndex">
-                                  <dt class="font-weight-bold">{{ dataItem.prompt }}</dt>
-                                  <dd>{{ dataItem.value }}</dd>
-                              </div>
-                          </dl>
-                                                      
-                          <!-- Botón de enlace -->
-                          <a :href="item.href" target="_blank" class="btn btn-primary">Ver</a>
-                      </div>
-                  </div>
-              </div>
-          </div>
-
-            <!-- TODO: Iterar sobre los items y mostrar cada uno usando el componente item-data -->
-            
-
+           <div class="row container mt-4 ms-4">
+            <item-data class="col-md-4"
+            v-for="(item, index) in col.items" 
+            :key="index" 
+            :item="item" 
+            :index="index" 
+          />
+           </div>
         </div>
 
         <!-- TODO: Cargar librería Vue 3 y archivo js/script.js -->

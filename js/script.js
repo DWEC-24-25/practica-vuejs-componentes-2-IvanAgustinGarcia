@@ -38,33 +38,76 @@ const server_data = {
 };
 
 // Componente edit-form
-const EditForm = Vue.defineComponent({
-    template: `
-        <div>
-            <h2>Edit Form</h2>
-            <!-- Aquí iría el formulario de edición -->
-        </div>
-    `
-});
-
-// Componente item-data
-const ItemData = Vue.defineComponent({
-    props: {
-        item: {
-            type: Object,
-            required: true
+const EditForm = {
+    props: ["itemdata", "index"],
+    methods: {
+        closeForm() {
+            this.$emit("formClosed"); 
         }
     },
     template: `
-        <div>
-            <h3>{{ item.data.find(d => d.name === 'name').value }}</h3>
-            <p>{{ item.data.find(d => d.name === 'description').value }}</p>
-            <p><strong>Director:</strong> {{ item.data.find(d => d.name === 'director').value }}</p>
-            <p><strong>Release Date:</strong> {{ item.data.find(d => d.name === 'datePublished').value }}</p>
-            <a :href="item.href" target="_blank">More Info</a>
+        <div class="card p-3">
+            <h2>Editar Película</h2>
+            <form>
+                <div v-for="(dataItem, dataIndex) in itemdata" :key="dataIndex" class="mb-3">
+                    <label :for="'field-' + index + '-' + dataItem.name" class="form-label">
+                        {{ dataItem.prompt }}
+                    </label>
+                    <input 
+                        v-model="dataItem.value" 
+                        :id="'field-' + index + '-' + dataItem.name" 
+                        class="form-control">
+                </div>
+                
+                <button type="button" class="btn btn-secondary mt-3" @click="closeForm">
+                    Cerrar
+                </button>
+            </form>
         </div>
     `
-});
+};
+// Componente item-data
+const ItemData = {
+    props: {
+        item: Object,
+        index: Number
+    },
+    data() {
+        return {
+            isEditing: false 
+        };
+    },
+    methods: {
+        toggleEditFormVisibility() {
+            this.isEditing = !this.isEditing; 
+        }
+    },
+    template: `
+        <div class="col-md-4">
+            <div class="card mb-3">
+                <div class="card-body">
+                    
+                    <div v-if="!isEditing">
+                        <h3>{{ item.data.find(d => d.name === 'name').value }}</h3>
+                        <p>{{ item.data.find(d => d.name === 'description').value }}</p>
+                        <p><strong>Director:</strong> {{ item.data.find(d => d.name === 'director').value }}</p>
+                        <p><strong>Release Date:</strong> {{ item.data.find(d => d.name === 'datePublished').value }}</p>
+                        <a :href="item.href" target="_blank" class="btn btn-primary">Ver</a>
+                        <button @click="toggleEditFormVisibility" class="btn btn-warning ms-2">Editar</button>
+                    </div>
+
+                    <edit-form 
+                        v-if="isEditing"
+                        :itemdata="item.data" 
+                        :index="index"
+                        @formClosed="toggleEditFormVisibility">
+                    </edit-form>
+
+                </div>
+            </div>
+        </div>
+    `
+};
 
 // Crear la aplicación Vue
 const app = Vue.createApp({
