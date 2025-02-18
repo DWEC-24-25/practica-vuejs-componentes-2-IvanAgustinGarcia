@@ -53,10 +53,12 @@ const EditForm = {
                     <label :for="'field-' + index + '-' + dataItem.name" class="form-label">
                         {{ dataItem.prompt }}
                     </label>
-                    <input 
-                        v-model="dataItem.value" 
-                        :id="'field-' + index + '-' + dataItem.name" 
-                        class="form-control">
+                    <template v-if="dataItem.name === 'description'">
+                        <textarea :id="'input-' + index + '-' + dataItem.name" v-model="dataItem.value" class="form-control" rows="4"></textarea>
+                    </template>
+                    <template v-else>
+                        <input :id="'input-' + index + '-' + dataItem.name" v-model="dataItem.value" class="form-control" />
+                    </template>
                 </div>
                 
                 <button type="button" class="btn btn-secondary mt-3" @click="closeForm">
@@ -66,6 +68,7 @@ const EditForm = {
         </div>
     `
 };
+
 // Componente item-data
 const ItemData = {
     props: {
